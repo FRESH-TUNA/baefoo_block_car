@@ -1,0 +1,221 @@
+﻿{
+	"extensionName": "Baefoo block for Car",
+	"description": "Baefoo block for Car",
+	"version": "0.1.0",
+	"author": "Urimalsoft",
+	"homepage": "",
+	"sort":0,
+	"javascriptURL":"js/Modules.js",
+  	"firmware":"1.0",
+  	"extensionPort":0,
+	"blockSpecs": [
+		[
+			"w",
+			"동작 LED 켜기",
+			"TurnOnLED",
+			{
+				"setup": "pinMode(2,OUTPUT);\n",           
+				"inc":"",
+				"def":"",
+				"work": "digitalWrite(2,1);\n",
+				"loop": ""
+			}
+		], 
+
+		[
+			"w",
+			"동작 LED 끄기",
+			"TurnOffLED",
+			{
+				"setup": "pinMode(2,OUTPUT);\n",           
+				"inc":"",
+				"def":"",
+				"work": "digitalWrite(2,0);\n",
+				"loop": ""
+			}
+		], 
+
+		[
+			"w",
+			"앞으로이동 좌측속도값%d.levels 우측속도값%d.levels",
+			"FrontMove",
+			"220",
+			"220",
+			{
+				"setup":"pinMode(3,OUTPUT);\npinMode(4,OUTPUT);\npinMode(5,OUTPUT);\npinMode(6,OUTPUT);\n",           
+				"inc":"",
+				"def":"",
+				"work": "analogWrite(3,{0});\ndigitalWrite(4,0);\ndigitalWrite(5,0);\nanalogWrite(6,{1});\n",
+				"loop": ""
+			}
+		],
+
+		[
+			"w",
+			"뒤로이동",
+			"BackMove",
+			{
+				"setup":"pinMode(3,OUTPUT);\npinMode(4,OUTPUT);\npinMode(5,OUTPUT);\npinMode(6,OUTPUT);\n",           
+				"inc":"",
+				"def":"",
+				"work":"digitalWrite(3,0);\ndigitalWrite(6,0);\ndigitalWrite(4,1);\ndigitalWrite(5,1);\n",
+				"loop": ""
+			}
+		], 
+
+		[
+			"w",
+			"왼쪽으로이동%d.levels",
+			"LeftMove",
+			"230",
+			{
+				"setup":"pinMode(3,OUTPUT);\npinMode(4,OUTPUT);\npinMode(5,OUTPUT);\npinMode(6,OUTPUT);\n",           
+				"inc":"",
+				"def":"",
+				"work":"analogWrite(3,{0});\ndigitalWrite(4,0);\ndigitalWrite(5,1);\nanalogWrite(6,{0});\n",
+				"loop": ""
+			}
+		],
+
+		[
+			"w",
+			"오른쪽으로이동%d.levels",
+			"RightMove",
+			"230",
+			{
+				"setup":"pinMode(3,OUTPUT);\npinMode(4,OUTPUT);\npinMode(5,OUTPUT);\npinMode(6,OUTPUT);\n",           
+				"inc":"",
+				"def":"",
+				"work":"analogWrite(3,{0});\ndigitalWrite(4,1);\ndigitalWrite(5,0);\nanalogWrite(6,{0});\n",
+				"loop": ""
+			}
+		],
+
+		[
+			"w",
+			"멈추기",
+			"Stop",
+			{
+				"setup":"pinMode(3,OUTPUT);\npinMode(4,OUTPUT);\npinMode(5,OUTPUT);\npinMode(6,OUTPUT);\n",           
+				"inc":"",
+				"def":"",
+				"work":"digitalWrite(3,0);\ndigitalWrite(4,0);\ndigitalWrite(5,0);\ndigitalWrite(6,0);\n",
+				"loop": ""
+			}
+		],
+
+		[
+			"r",
+			"초음파센서로 거리 읽어오기",
+			"GetDistance",
+			{
+				"setup":"",           
+				"inc":"",
+				"def":"--separator--double getDistance(int trig,int echo){\npinMode(trig,OUTPUT);\ndigitalWrite(trig,LOW);\ndelayMicroseconds(2);\ndigitalWrite(trig,HIGH);\ndelayMicroseconds(10);\ndigitalWrite(trig,LOW);\npinMode(echo, INPUT);\nreturn pulseIn(echo,HIGH,30000)/58.0;\n}\n",
+				"work":"getDistance(13,12)",
+				"loop": ""
+			}
+		],
+
+		[
+			"w",
+			"블루투스 시리얼 시작",
+			"Bluetooth Serial begin",
+			{
+				"setup":"BT.begin(9600);\n",
+				"inc":"",
+				"def":"SoftwareSerial BT(8, 9);\n",
+				"work":"",
+				"loop":""
+			}
+		],
+
+		[
+     			 "b",
+			"블루투스 시리얼 사용 가능 확인",
+			"BluetoothSerial data available",
+			{
+				"setup":"",
+				"inc":"",
+				"def":"",
+				"work":"BT.available()",
+				"loop":""
+			}
+   		 ],
+		
+		[
+     			"w",
+			"블루투스 시리얼 쓰기 %n",
+			"BluetoothSerial data write",
+			"0",
+			{
+				"setup":"",
+				"inc":"",
+				"def":"",
+				"work":"BT.print({0});\n",
+				"loop":""
+			}
+   		 ],
+
+		[
+     			 "r",
+			"블루투스 시리얼 읽기",
+			"BluetoothSerial data read",
+			{
+				"setup":"",
+				"inc":"",
+				"def":"",
+				"work":"BT.read()",
+				"loop":""
+			}
+   		 ],
+
+		[
+     			 "w",
+			"블루투스 시리얼 버퍼 지우기",
+			"BluetoothSerial data flush",
+			{
+				"setup":"",
+				"inc":"",
+				"def":"",
+				"work":"BT.read();\n",
+				"loop":""
+			}
+   		 ],
+
+		[
+			"w",
+			"블루투스 이름 변경( 이름 %s )",
+			"Bluetooth Name Change",
+			"name",
+			{
+				"setup":"",
+				"inc":"",
+				"def":"",
+				"work":"String btName = \"AT+NAME\";\nbtName = btName+{0};\nchar btNameArr[btName.length()+1];\nbtName.toCharArray(btNameArr,btName.length()+1);\nbtNameArr[btName.length()] = '\\0';\nBT.write(btNameArr);\n",
+				"loop":""
+			}
+		],
+
+		[
+			"w",
+			"블루투스 모듈 핀번호(비밀번호) 변경 ( 핀번호 %n )",
+			"Bluetooth Module Pin Setting",
+			"1234",
+			{
+				"setup":"",
+				"inc":"",
+				"def":"",
+				"work":" _delay(1);\nBT.write(\"AT+PIN{0}\");\n",
+				"loop":""
+			}
+		]
+	],
+	"menus": {
+		"levels":["200","220","230"]
+	},
+	"values":{
+	},
+	"translators":{
+	}
+}
